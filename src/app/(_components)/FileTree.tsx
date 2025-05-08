@@ -3,7 +3,13 @@
 import JSZip from "jszip";
 import { useEffect, useState } from "react";
 
-export default function FileTree({ zipFile }: { zipFile: File | null }) {
+export default function FileTree({
+  zipFile,
+  onOpenFile,
+}: {
+  zipFile: File | null;
+  onOpenFile: (file: string) => void;
+}) {
   const [fileTree, setFileTree] = useState<{ path: string; isDir: boolean }[]>(
     []
   );
@@ -32,7 +38,9 @@ export default function FileTree({ zipFile }: { zipFile: File | null }) {
     <div className="w-[200px] h-full border-2 border-gray-400 overflow-y-auto">
       <ul>
         {fileTree?.map((file, index) => (
-          <li key={index}>{file.path}</li>
+          <li key={index}>
+            <button onClick={() => onOpenFile(file.path)}>{file.path}</button>
+          </li>
         ))}
       </ul>
     </div>
