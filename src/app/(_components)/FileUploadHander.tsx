@@ -48,6 +48,11 @@ export default function FileUploadHander() {
     }
   };
 
+  const handleClear = () => {
+    setFile(null);
+    setFileName(null);
+  };
+
   return (
     <div
       className="flex items-center justify-center gap-4 w-full h-[70px] border-2 border-gray-400"
@@ -72,6 +77,7 @@ export default function FileUploadHander() {
           ? "파일을 놓으세요!"
           : "클릭하거나 드래그해서 파일을 업로드하세요"}
       </p>
+      <button onClick={handleClear}>지우기</button>
       <button onClick={handleDownload}>다운로드</button>
     </div>
   );
