@@ -40,29 +40,26 @@ function isTextMime(mimeType: string): boolean {
 
 function hasNullByte(buffer: ArrayBuffer): boolean {
   const bytes = new Uint8Array(buffer);
-  return bytes.includes(0); // 0x00이 포함되어 있으면 바이너리로 판단
+  return bytes.includes(0); // 0x00
 }
 
-export async function classifyFile(
-  file: File
-): Promise<"image" | "text" | "binary"> {
+// --- File 객체용 ---
+export async function isImageFile(file: File): Promise<boolean> {
   const ext = getExtension(file.name);
-  const mime = file.type;
-  const buffer = await file.slice(0, 1024).arrayBuffer(); // 처음 1KB만 검사
+  return isImageMime(file.type) || imageExtensions.includes(ext);
+}
 
-  // 이미지 판단
-  if (isImageMime(mime) || imageExtensions.includes(ext)) {
-    return "image";
-  }
-
-  // 텍스트 판단
-  if (
-    (isTextMime(mime) || textExtensions.includes(ext)) &&
+export async function isTextFile(file: File): Promise<boolean> {
+  const ext = getExtension(file.name);
+  const buffer = await file.slice(0, 1024).arrayBuffer();
+  return (
+    (isTextMime(file.type) || textExtensions.includes(ext)) &&
     !hasNullByte(buffer)
-  ) {
-    return "text";
-  }
+  );
+}
 
-  // 나머지는 binary
-  return "binary";
+export async function isBinaryFile(file: File): Promise<boolean> {
+  const isImage = await isImageFile(file);
+  const isText = await isTextFile(file);
+  return !isImage && !isText;
 }
