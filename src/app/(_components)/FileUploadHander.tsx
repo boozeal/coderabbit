@@ -2,8 +2,13 @@
 
 import { useCallback, useState } from "react";
 
-export default function FileUploadHander() {
-  const [file, setFile] = useState<File | null>(null);
+export default function FileUploadHander({
+  setFile,
+  file,
+}: {
+  file: File | null;
+  setFile: (file: File | null) => void;
+}) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
