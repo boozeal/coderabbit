@@ -9,12 +9,17 @@ import { useState } from "react";
 export default function Home() {
   const [zipFile, setZipFile] = useState<File | null>(null);
   const [openFiles, setOpenFiles] = useState<string[]>([]);
+  const [currentFileContent, setCurrentFileContent] = useState<string>("");
+  const [currentFileType, setCurrentFileType] = useState<string>("");
+
   const handleCloseFile = (file: string) => {
     setOpenFiles(openFiles.filter((f) => f !== file));
   };
 
   const handleOpenFile = (file: string) => {
     setOpenFiles([...openFiles, file]);
+    setCurrentFileContent(file);
+    setCurrentFileType(file.split(".").pop() || "");
   };
 
   return (
@@ -24,7 +29,7 @@ export default function Home() {
         <FileTree zipFile={zipFile} onOpenFile={handleOpenFile} />
         <div className="flex flex-col w-full">
           <Tabs openFiles={openFiles} onClose={handleCloseFile} />
-          <Editor />
+          <Editor fileContent={currentFileContent} fileType={currentFileType} />
         </div>
       </div>
     </div>
