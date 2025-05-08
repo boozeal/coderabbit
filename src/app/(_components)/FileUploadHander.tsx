@@ -4,22 +4,34 @@ import { useCallback, useState } from "react";
 
 export default function FileUploadHander() {
   const [file, setFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setIsDragging(false);
+
     const file = e.dataTransfer.files[0];
     if (file) {
+      setFileName(file.name);
       setFile(file);
     }
   }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setFileName(file.name);
       setFile(file);
     }
   };
@@ -38,12 +50,28 @@ export default function FileUploadHander() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center w-full h-[70px] border-2 border-gray-400"
+      className="flex items-center justify-center gap-4 w-full h-[70px] border-2 border-gray-400"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
     >
-      <input type="file" onChange={handleFileChange} />
-      {file && <p>{file.name}</p>}
+      <input
+        id="fileInput"
+        type="file"
+        className="hidden"
+        accept=".zip"
+        onChange={handleFileChange}
+      />
+      <p
+        className="text-gray-600"
+        onClick={() => document.getElementById("fileInput")?.click()}
+      >
+        {fileName
+          ? `업로드된 파일: ${fileName}`
+          : isDragging
+          ? "파일을 놓으세요!"
+          : "클릭하거나 드래그해서 파일을 업로드하세요"}
+      </p>
       <button onClick={handleDownload}>다운로드</button>
     </div>
   );
