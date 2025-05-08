@@ -18,8 +18,13 @@ export default function FileUploadHander({
 
     const file = e.dataTransfer.files[0];
     if (file) {
-      setFileName(file.name);
-      setFile(file);
+      const fileExtension = file.name.split(".").pop();
+      if (fileExtension === "zip") {
+        setFileName(file.name);
+        setFile(file);
+      } else {
+        alert("Only zip files are allowed.");
+      }
     }
   }, []);
 
