@@ -3,9 +3,13 @@
 export default function Tabs({
   openFiles,
   onClose,
+  onSelect,
+  selectedFile,
 }: {
   openFiles: string[];
   onClose: (file: string) => void;
+  onSelect: (file: string) => void;
+  selectedFile: string | null;
 }) {
   return (
     <div className="w-full h-[70px] border-2 border-gray-400">

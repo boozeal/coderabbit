@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 export default function FileTree({
   zipFile,
   onOpenFile,
+  onZipParsed,
 }: {
   zipFile: File | null;
-  onOpenFile: (file: string) => void;
+  onOpenFile: (filePath: string) => void;
+  onZipParsed: (fileMap: Map<string, Uint8Array>) => void;
 }) {
   const [fileTree, setFileTree] = useState<{ path: string; isDir: boolean }[]>(
     []
