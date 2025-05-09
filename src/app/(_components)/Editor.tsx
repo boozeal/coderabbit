@@ -17,7 +17,6 @@ export default function Editor({ file }: { file: OpenedFile | null }) {
     const text = new TextDecoder().decode(file.content);
     const uri = monaco.Uri.parse(`file:///${file.path}`);
 
-    console.log("uri = ", uri);
     let model = monaco.editor.getModel(uri);
     if (!model) {
       model = monaco.editor.createModel(text, undefined, uri);

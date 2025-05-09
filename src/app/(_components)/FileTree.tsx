@@ -1,11 +1,62 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type TreeNode = {
   name: string;
   path: string;
   isDir: boolean;
   children?: TreeNode[];
 };
+
+function TreeItem({
+  node,
+  depth,
+  onOpenFile,
+}: {
+  node: TreeNode;
+  depth: number;
+  onOpenFile: (filePath: string) => void;
+}) {
+  const [isDirOpen, setIsDirOpen] = useState(false);
+  useEffect(() => {
+    console.log(depth);
+  }, []);
+
+  return (
+    <li style={{ paddingLeft: `${depth * 8}px` }}>
+      {node.isDir ? (
+        <div>
+          <div
+            onClick={() => setIsDirOpen((prev) => !prev)}
+            className="cursor-pointer"
+          >
+            {isDirOpen ? "▼" : "▶"} {node.name}
+          </div>
+          {isDirOpen && node.children && (
+            <ul>
+              {node.children.map((child, idx) => (
+                <TreeItem
+                  key={idx}
+                  node={child}
+                  depth={depth + 1}
+                  onOpenFile={onOpenFile}
+                />
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : (
+        <button
+          onClick={() => onOpenFile(node.path)}
+          className="text-left w-full"
+        >
+          📄 {node.name}
+        </button>
+      )}
+    </li>
+  );
+}
 
 export default function FileTree({
   nodes,
@@ -14,32 +65,13 @@ export default function FileTree({
   nodes: TreeNode[];
   onOpenFile: (filePath: string) => void;
 }) {
-  const renderTree = (nodes: TreeNode[], depth: number = 0) => {
-    return (
-      <div className={`pl-${depth * 10}`}>
-        <ul>
-          {nodes.map((node, idx) => (
-            <li key={idx}>
-              {node.isDir ? (
-                <div>
-                  <span>{node.name}</span>
-                  {node.children && renderTree(node.children, depth + 1)}
-                </div>
-              ) : (
-                <button onClick={() => onOpenFile(node.path)}>
-                  {node.name}
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
   return (
     <div className="w-[200px] h-full border-2 border-gray-400 overflow-y-auto">
-      {renderTree(nodes, 0)}
+      <ul>
+        {nodes.map((node, idx) => (
+          <TreeItem key={idx} node={node} depth={0} onOpenFile={onOpenFile} />
+        ))}
+      </ul>
     </div>
   );
 }
