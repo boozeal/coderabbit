@@ -17,6 +17,7 @@ export default function Editor({ file }: { file: OpenedFile | null }) {
     const text = new TextDecoder().decode(file.content);
     const uri = monaco.Uri.parse(`file:///${file.path}`);
 
+    console.log("uri = ", uri);
     let model = monaco.editor.getModel(uri);
     if (!model) {
       model = monaco.editor.createModel(text, undefined, uri);
@@ -36,7 +37,6 @@ export default function Editor({ file }: { file: OpenedFile | null }) {
     return () => {
       model?.dispose();
     };
-    console.log(file);
   }, [file]);
 
   if (!file) {
@@ -56,7 +56,14 @@ export default function Editor({ file }: { file: OpenedFile | null }) {
   }
 
   if (file.type === "binary") {
-    return <div className="p-4">Binary file (not editable)</div>;
+    return (
+      <div className="p-4">
+        Binary file (not editable)
+        <span>{file.path}</span>
+        <span>{file.type}</span>
+        <span>{file.content}</span>
+      </div>
+    );
   }
 
   return <div className="flex-1" ref={editorRef} />;

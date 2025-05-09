@@ -1,20 +1,43 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { OpenedFile } from "../utils/openedFile";
+
+type TreeNode = {
+  name: string;
+  path: string;
+  isDir: boolean;
+  children?: TreeNode[];
+};
 
 export default function FileUploadHander({
   setFile,
   file,
+  setFileMap,
+  setFileTree,
+  setOpenFiles,
 }: {
   file: File | null;
   setFile: (file: File | null) => void;
+  setFileMap: (fileMap: Map<string, OpenedFile>) => void;
+  setFileTree: (fileTree: TreeNode[]) => void;
+  setOpenFiles: (openFiles: string[]) => void;
 }) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  const handleClear = () => {
+    setFile(null);
+    setFileName(null);
+    setFileMap(new Map());
+    setFileTree([]);
+    setOpenFiles([]);
+  };
+
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
+    handleClear();
 
     const file = e.dataTransfer.files[0];
     if (file) {
@@ -56,11 +79,6 @@ export default function FileUploadHander({
       a.click();
       URL.revokeObjectURL(url);
     }
-  };
-
-  const handleClear = () => {
-    setFile(null);
-    setFileName(null);
   };
 
   return (
