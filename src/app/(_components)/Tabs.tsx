@@ -21,9 +21,13 @@ export default function Tabs({
               ? "bg-[#1E1E1E] text-[#EBCB8B]"
               : "border-1 border-gray-400"
           }`}
-          onClick={() => onSelect(file)}
         >
-          <span className="truncate text-sm">📄 {file.split("/").pop()}</span>
+          <span
+            className="truncate text-sm flex-grow"
+            onClick={() => onSelect(file)}
+          >
+            📄 {file.split("/").pop()}
+          </span>
           <button onClick={() => onClose(file)} className="px-1">
             X
           </button>

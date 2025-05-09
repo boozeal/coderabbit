@@ -38,14 +38,14 @@ export default function Home() {
     const newOpenFiles = openFiles.filter((f) => f !== filePath);
 
     // 이전 인덱스 계산 (index - 1), 0보다 작으면 첫 번째 파일 선택
-    // const newCurrent =
-    //   index > 0
-    //     ? openFiles[index - 1]
-    //     : newOpenFiles.length > 0
-    //     ? newOpenFiles[0]
-    //     : null;
+    const newCurrent =
+      index > 0
+        ? openFiles[index - 1]
+        : newOpenFiles.length > 0
+        ? newOpenFiles[0]
+        : null;
 
-    setCurrentFilePath(null);
+    setCurrentFilePath(newCurrent);
     setOpenFiles(newOpenFiles);
   };
 
