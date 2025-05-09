@@ -122,7 +122,7 @@ export default function Home() {
       <div className="flex flex-1 flex-row">
         <FileTree nodes={fileTree} onOpenFile={handleOpenFile} />
         <div className="flex flex-col flex-1">
-          {zipFile && (
+          {openFiles.length > 0 && (
             <Tabs
               openFiles={openFiles}
               onClose={handleCloseFile}

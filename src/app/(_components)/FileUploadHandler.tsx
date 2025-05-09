@@ -74,6 +74,7 @@ export default function FileUploadHander({
       setFile(file);
     }
   };
+
   const handleDownload = async () => {
     const models = monaco.editor.getModels();
     const modelMap = new Map<string, monaco.editor.ITextModel>();
@@ -101,7 +102,7 @@ export default function FileUploadHander({
     const url = URL.createObjectURL(content);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "compressed_files.zip";
+    a.download = `${fileName}.zip`;
     a.click();
     URL.revokeObjectURL(url);
   };
