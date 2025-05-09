@@ -79,13 +79,11 @@ export default function Editor({
 
   return (
     <div className="flex-1 relative">
-      {file.type === "text" && (
-        <div
-          key={file ? file.path : "empty"}
-          ref={editorRef}
-          className="absolute inset-0 z-0"
-        />
-      )}
+      <div
+        key={file ? file.path : "empty"}
+        ref={editorRef}
+        className="absolute inset-0 z-0"
+      />
 
       {/* 이미지 파일인 경우 오버레이로 이미지 표시 */}
       {file.type === "image" && file.content && (
