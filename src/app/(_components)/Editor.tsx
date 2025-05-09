@@ -2,46 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as monaco from "monaco-editor";
-import { isImageFile, isTextFile, isBinaryFile } from "../utils/classifyFile";
+import { OpenedFile } from "../utils/openedFile";
 
-export default function Editor({ file }: { file: File | null }) {
+export default function Editor({ file }: { file: OpenedFile | null }) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [editorInstance, setEditorInstance] =
     useState<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [fileType, setFileType] = useState<"image" | "text" | "binary" | null>(
-    null
-  );
-  const [fileContent, setFileContent] = useState<Uint8Array | null>(null);
-
-  // Determine file type and read content
-  useEffect(() => {
-    if (!file) return;
-
-    const classifyAndRead = async () => {
-      if (await isImageFile(file)) {
-        setFileType("image");
-        const buffer = await file.arrayBuffer();
-        setFileContent(new Uint8Array(buffer));
-      } else if (await isTextFile(file)) {
-        setFileType("text");
-        const buffer = await file.arrayBuffer();
-        setFileContent(new Uint8Array(buffer));
-      } else {
-        setFileType("binary");
-        setFileContent(null);
-      }
-    };
-
-    classifyAndRead();
-  }, [file]);
 
   // Monaco Editor setup
   useEffect(() => {
-    if (!editorRef.current || !file || fileType !== "text" || !fileContent)
+    if (!editorRef.current || !file || file.type !== "text" || !file.content)
       return;
 
-    const text = new TextDecoder().decode(fileContent);
-    const uri = monaco.Uri.parse(`file:///${file.name}`);
+    const text = new TextDecoder().decode(file.content);
+    const uri = monaco.Uri.parse(`file:///${file.path}`);
 
     let model = monaco.editor.getModel(uri);
     if (!model) {
@@ -62,21 +36,26 @@ export default function Editor({ file }: { file: File | null }) {
     return () => {
       model?.dispose();
     };
-  }, [file, fileType, fileContent]);
+    console.log(file);
+  }, [file]);
 
   if (!file) {
-    return <div className="flex-1">No file selected</div>;
+    return <div className="flex-1 p-4">No file selected</div>;
   }
 
-  if (fileType === "image" && fileContent) {
-    const blob = new Blob([fileContent]);
+  if (file.type === "image" && file.content) {
+    const blob = new Blob([file.content]);
     const src = URL.createObjectURL(blob);
     return (
-      <img src={src} alt={file.name} className="object-contain max-h-full" />
+      <img
+        src={src}
+        alt={file.name}
+        className="object-contain max-h-full max-w-full mx-auto"
+      />
     );
   }
 
-  if (fileType === "binary") {
+  if (file.type === "binary") {
     return <div className="p-4">Binary file (not editable)</div>;
   }
 

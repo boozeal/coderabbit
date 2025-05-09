@@ -3,10 +3,15 @@
 import FileUploadHander from "./(_components)/FileUploadHander";
 import FileTree from "./(_components)/FileTree";
 import Tabs from "./(_components)/Tabs";
-import Editor from "./(_components)/Editor";
 import { useEffect, useState } from "react";
 import JSZip from "jszip";
-import { OpenedFile } from "./utils/openedFile";
+import { createOpenedFile, OpenedFile } from "./utils/openedFile";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import("./(_components)/Editor"), {
+  ssr: false,
+});
+
 type TreeNode = {
   name: string;
   path: string;
@@ -66,19 +71,23 @@ export default function Home() {
   useEffect(() => {
     if (zipFile) {
       const reader = new FileReader();
+
       reader.onload = async (e) => {
         const zip = await new JSZip().loadAsync(
           e.target?.result as ArrayBuffer
         );
         const files: { path: string; isDir: boolean }[] = [];
-        const map = new Map<string, Uint8Array>();
+        const map = new Map<string, OpenedFile>();
 
         await Promise.all(
-          Object.entries(zip.files).map(async ([path, file]) => {
-            files.push({ path, isDir: file.dir });
-            if (!file.dir) {
-              const data = await file.async("uint8array");
-              map.set(path, data);
+          Object.entries(zip.files).map(async ([path, zipEntry]) => {
+            files.push({ path, isDir: zipEntry.dir });
+
+            if (!zipEntry.dir) {
+              const blob = await zipEntry.async("blob");
+              const file = new File([blob], path); // create File from blob
+              const openedFile = await createOpenedFile(file, path);
+              map.set(path, openedFile);
             }
           })
         );
@@ -87,6 +96,7 @@ export default function Home() {
         setFileTree(tree);
         setFileMap(map);
       };
+
       reader.readAsArrayBuffer(zipFile);
     }
   }, [zipFile]);
