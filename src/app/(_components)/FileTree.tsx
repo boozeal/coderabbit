@@ -56,7 +56,7 @@ export default function FileTree({
   onOpenFile: (filePath: string) => void;
 }) {
   return (
-    <div className="w-[200px] h-full border-2 border-gray-400 overflow-y-auto">
+    <div className="w-[200px] min-h-screen border-2 border-gray-400 overflow-y-auto">
       <ul className="-ml-2">
         {nodes.map((node, idx) => (
           <TreeItem key={idx} node={node} onOpenFile={onOpenFile} />

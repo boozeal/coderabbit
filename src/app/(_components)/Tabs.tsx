@@ -17,7 +17,7 @@ export default function Tabs({
         <div
           key={index}
           className={`flex items-center gap-2 p-2 min-w-[100px] max-w-[200px] border-1 border-gray-400 ${
-            file === selectedFile ? "bg-gray-800 text-white" : ""
+            file === selectedFile ? "bg-[#1E1E1E] text-[#EBCB8B]" : ""
           }`}
           onClick={() => onSelect(file)}
         >

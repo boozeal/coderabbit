@@ -4,11 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import * as monaco from "monaco-editor";
 import { OpenedFile } from "../utils/openedFile";
 
-export default function Editor({ file }: { file: OpenedFile | null }) {
+export default function Editor({
+  file,
+  setIsModified,
+}: {
+  file: OpenedFile | null;
+  setIsModified: (isModified: boolean) => void;
+}) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [editorInstance, setEditorInstance] =
     useState<monaco.editor.IStandaloneCodeEditor | null>(null);
-
   // Monaco Editor setup
   useEffect(() => {
     if (!editorRef.current || !file || file.type !== "text" || !file.content)
@@ -29,6 +34,17 @@ export default function Editor({ file }: { file: OpenedFile | null }) {
         automaticLayout: true,
       });
       setEditorInstance(instance);
+
+      instance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyZ, () => {
+        instance.trigger("keyboard", "undo", null);
+      });
+
+      instance.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyZ,
+        () => {
+          instance.trigger("keyboard", "redo", null);
+        }
+      );
     } else {
       editorInstance.setModel(model);
     }
@@ -37,6 +53,18 @@ export default function Editor({ file }: { file: OpenedFile | null }) {
       model?.dispose();
     };
   }, [file]);
+
+  useEffect(() => {
+    if (editorInstance) {
+      const disposable = editorInstance.onDidChangeModelContent(() => {
+        setIsModified(true);
+      });
+
+      return () => {
+        disposable.dispose();
+      };
+    }
+  }, [editorInstance]);
 
   if (!file) {
     return <div className="flex-1 p-4">No file selected</div>;

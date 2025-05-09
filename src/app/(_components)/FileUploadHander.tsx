@@ -2,7 +2,8 @@
 
 import { useCallback, useState } from "react";
 import { OpenedFile } from "../utils/openedFile";
-
+import JSZip from "jszip";
+import * as monaco from "monaco-editor";
 type TreeNode = {
   name: string;
   path: string;
@@ -16,12 +17,14 @@ export default function FileUploadHander({
   setFileMap,
   setFileTree,
   setOpenFiles,
+  isModified,
 }: {
   file: File | null;
   setFile: (file: File | null) => void;
   setFileMap: (fileMap: Map<string, OpenedFile>) => void;
   setFileTree: (fileTree: TreeNode[]) => void;
   setOpenFiles: (openFiles: string[]) => void;
+  isModified: boolean;
 }) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -69,16 +72,25 @@ export default function FileUploadHander({
     }
   };
 
-  const handleDownload = () => {
-    // 클라이언트 측에서 다운로드 처리
-    if (file) {
-      const url = URL.createObjectURL(file);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = file.name;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+  const handleDownload = async () => {
+    const zip = new JSZip();
+
+    const models = monaco.editor.getModels();
+
+    models.forEach((model) => {
+      const path = model.uri.path;
+      const content = model.getValue();
+      const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
+      zip.file(normalizedPath, content);
+    });
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "modified_project.zip";
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -106,7 +118,13 @@ export default function FileUploadHander({
           : "클릭하거나 드래그해서 파일을 업로드하세요"}
       </p>
       <button onClick={handleClear}>지우기</button>
-      <button onClick={handleDownload}>다운로드</button>
+      <button
+        onClick={handleDownload}
+        disabled={!isModified}
+        className={`${!isModified ? "opacity-50" : ""}`}
+      >
+        다운로드
+      </button>
     </div>
   );
 }

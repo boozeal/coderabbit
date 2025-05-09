@@ -1,6 +1,5 @@
 "use client";
 
-import FileUploadHander from "./(_components)/FileUploadHander";
 import FileTree from "./(_components)/FileTree";
 import Tabs from "./(_components)/Tabs";
 import { useEffect, useState } from "react";
@@ -11,6 +10,13 @@ import dynamic from "next/dynamic";
 const Editor = dynamic(() => import("./(_components)/Editor"), {
   ssr: false,
 });
+
+const FileUploadHander = dynamic(
+  () => import("./(_components)/FileUploadHander"),
+  {
+    ssr: false,
+  }
+);
 
 type TreeNode = {
   name: string;
@@ -25,6 +31,7 @@ export default function Home() {
   const [currentFilePath, setCurrentFilePath] = useState<string | null>(null);
   const [fileTree, setFileTree] = useState<TreeNode[]>([]);
   const [fileMap, setFileMap] = useState<Map<string, OpenedFile>>(new Map());
+  const [isModified, setIsModified] = useState(false);
 
   const handleCloseFile = (filePath: string) => {
     setOpenFiles(openFiles.filter((f) => f !== filePath));
@@ -55,7 +62,7 @@ export default function Home() {
         } else {
           const newNode: TreeNode = {
             name: part,
-            path: parts.slice(0, index + 1).join("/"),
+            path: path,
             isDir: index < parts.length - 1 || isDir,
             children: [],
           };
@@ -102,13 +109,14 @@ export default function Home() {
   }, [zipFile]);
 
   return (
-    <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-black text-white">
+    <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-[#0D0D0D] text-[#d4d4d4]">
       <FileUploadHander
         setFile={setZipFile}
         file={zipFile}
         setFileMap={setFileMap}
         setFileTree={setFileTree}
         setOpenFiles={setOpenFiles}
+        isModified={isModified}
       />
       <div className="flex flex-1 flex-row">
         <FileTree nodes={fileTree} onOpenFile={handleOpenFile} />
@@ -121,6 +129,7 @@ export default function Home() {
           />
           <Editor
             file={currentFilePath ? fileMap.get(currentFilePath) ?? null : null}
+            setIsModified={setIsModified}
           />
         </div>
       </div>
