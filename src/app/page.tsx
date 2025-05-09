@@ -126,12 +126,12 @@ export default function Home() {
     <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-[#141414] text-[#828282]">
       <FileUploadHandler
         setFile={setZipFile}
-        file={zipFile}
         fileMap={fileMap}
         setFileMap={setFileMap}
         setFileTree={setFileTree}
         setOpenFiles={setOpenFiles}
         isModified={isModified}
+        setIsModified={setIsModified}
       />
       <div className="flex flex-1 flex-row">
         <FileTree nodes={fileTree} onOpenFile={handleOpenFile} />

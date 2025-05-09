@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type TreeNode = {
   name: string;
@@ -17,9 +17,6 @@ function TreeItem({
   onOpenFile: (filePath: string) => void;
 }) {
   const [isDirOpen, setIsDirOpen] = useState(false);
-  useEffect(() => {
-    console.log(node);
-  }, [node]);
 
   return (
     <li className="px-2 text-[16px]">

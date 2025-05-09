@@ -14,20 +14,20 @@ type TreeNode = {
 
 export default function FileUploadHander({
   setFile,
-  file,
   fileMap,
   setFileMap,
   setFileTree,
   setOpenFiles,
   isModified,
+  setIsModified,
 }: {
-  file: File | null;
   fileMap: Map<string, OpenedFile>;
   setFile: (file: File | null) => void;
   setFileMap: (fileMap: Map<string, OpenedFile>) => void;
   setFileTree: (fileTree: TreeNode[]) => void;
   setOpenFiles: (openFiles: string[]) => void;
   isModified: boolean;
+  setIsModified: (isModified: boolean) => void;
 }) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -38,6 +38,7 @@ export default function FileUploadHander({
     setFileMap(new Map());
     setFileTree([]);
     setOpenFiles([]);
+    setIsModified(false);
   };
 
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
