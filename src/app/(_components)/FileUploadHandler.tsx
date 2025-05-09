@@ -109,7 +109,7 @@ export default function FileUploadHander({
 
   return (
     <div
-      className="flex items-center justify-center gap-4 w-full h-[70px] border-2 border-gray-400"
+      className="flex items-center justify-center gap-4 w-full h-[70px] border-1 border-[#202020]"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}

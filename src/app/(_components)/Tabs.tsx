@@ -19,7 +19,7 @@ export default function Tabs({
           className={`flex items-center justify-between p-2 min-w-[100px] max-w-[200px] ${
             file === selectedFile
               ? "bg-[#1E1E1E] text-[#EBCB8B]"
-              : "border-1 border-gray-400"
+              : "border-1 border-[#202020]"
           }`}
         >
           <span

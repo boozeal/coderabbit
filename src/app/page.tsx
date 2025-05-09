@@ -49,10 +49,6 @@ export default function Home() {
     setOpenFiles(newOpenFiles);
   };
 
-  useEffect(() => {
-    console.log(currentFilePath);
-  }, [currentFilePath]);
-
   const handleOpenFile = (filePath: string) => {
     if (!openFiles.includes(filePath)) {
       setOpenFiles([...openFiles, filePath]);
@@ -64,7 +60,12 @@ export default function Home() {
     const root: TreeNode[] = [];
 
     files.forEach(({ path, isDir }) => {
-      const parts = path.split("/");
+      const parts = path
+        .split("/")
+        .filter(
+          (part) =>
+            part !== "" && !part.startsWith(".") && !part.startsWith("__MACOSX")
+        );
       let currentLevel = root;
 
       parts.forEach((part, index) => {
@@ -122,7 +123,7 @@ export default function Home() {
   }, [zipFile]);
 
   return (
-    <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-[#0D0D0D] text-[#d4d4d4]">
+    <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-[#141414] text-[#828282]">
       <FileUploadHandler
         setFile={setZipFile}
         file={zipFile}
