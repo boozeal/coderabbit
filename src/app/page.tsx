@@ -6,7 +6,7 @@ import Tabs from "./(_components)/Tabs";
 import Editor from "./(_components)/Editor";
 import { useEffect, useState } from "react";
 import JSZip from "jszip";
-
+import { OpenedFile } from "./utils/openedFile";
 type TreeNode = {
   name: string;
   path: string;
@@ -19,7 +19,7 @@ export default function Home() {
   const [openFiles, setOpenFiles] = useState<string[]>([]);
   const [currentFilePath, setCurrentFilePath] = useState<string | null>(null);
   const [fileTree, setFileTree] = useState<TreeNode[]>([]);
-  const [fileMap, setFileMap] = useState<Map<string, Uint8Array>>(new Map());
+  const [fileMap, setFileMap] = useState<Map<string, OpenedFile>>(new Map());
 
   const handleCloseFile = (filePath: string) => {
     setOpenFiles(openFiles.filter((f) => f !== filePath));
@@ -103,9 +103,9 @@ export default function Home() {
             onSelect={setCurrentFilePath}
             selectedFile={currentFilePath}
           />
-          {/* <Editor
-            file={currentFilePath ? fileMap.get(currentFilePath) : null}
-          /> */}
+          <Editor
+            file={currentFilePath ? fileMap.get(currentFilePath) ?? null : null}
+          />
         </div>
       </div>
     </div>
