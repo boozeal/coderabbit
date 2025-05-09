@@ -19,7 +19,6 @@ export default function Editor({
     if (!editorRef.current || !file) {
       editorInstance?.dispose();
       setEditorInstance(null);
-      console.log("Disposing editor because file is null");
       return;
     }
 

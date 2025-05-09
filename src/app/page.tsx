@@ -132,6 +132,7 @@ export default function Home() {
         setOpenFiles={setOpenFiles}
         isModified={isModified}
         setIsModified={setIsModified}
+        setCurrentFilePath={setCurrentFilePath}
       />
       <div className="flex flex-1 flex-row">
         <FileTree nodes={fileTree} onOpenFile={handleOpenFile} />

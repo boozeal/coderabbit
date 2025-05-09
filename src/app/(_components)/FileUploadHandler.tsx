@@ -20,6 +20,7 @@ export default function FileUploadHander({
   setOpenFiles,
   isModified,
   setIsModified,
+  setCurrentFilePath,
 }: {
   fileMap: Map<string, OpenedFile>;
   setFile: (file: File | null) => void;
@@ -28,6 +29,7 @@ export default function FileUploadHander({
   setOpenFiles: (openFiles: string[]) => void;
   isModified: boolean;
   setIsModified: (isModified: boolean) => void;
+  setCurrentFilePath: (currentFilePath: string | null) => void;
 }) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -39,6 +41,7 @@ export default function FileUploadHander({
     setFileTree([]);
     setOpenFiles([]);
     setIsModified(false);
+    setCurrentFilePath(null);
   };
 
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -132,7 +135,13 @@ export default function FileUploadHander({
           ? "파일을 놓으세요!"
           : "클릭하거나 드래그해서 파일을 업로드하세요"}
       </p>
-      <button onClick={handleClear}>지우기</button>
+      <button
+        onClick={handleClear}
+        disabled={!fileName}
+        className={`${!fileName ? "opacity-50" : ""}`}
+      >
+        지우기
+      </button>
       <button
         onClick={handleDownload}
         disabled={!isModified}
