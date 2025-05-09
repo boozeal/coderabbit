@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type TreeNode = {
   name: string;
@@ -11,20 +11,15 @@ type TreeNode = {
 
 function TreeItem({
   node,
-  depth,
   onOpenFile,
 }: {
   node: TreeNode;
-  depth: number;
   onOpenFile: (filePath: string) => void;
 }) {
   const [isDirOpen, setIsDirOpen] = useState(false);
-  useEffect(() => {
-    console.log(depth);
-  }, []);
 
   return (
-    <li style={{ paddingLeft: `${depth * 8}px` }}>
+    <li className="px-2">
       {node.isDir ? (
         <div>
           <div
@@ -34,14 +29,9 @@ function TreeItem({
             {isDirOpen ? "▼" : "▶"} {node.name}
           </div>
           {isDirOpen && node.children && (
-            <ul>
+            <ul className="border-l border-gray-200 mx-2">
               {node.children.map((child, idx) => (
-                <TreeItem
-                  key={idx}
-                  node={child}
-                  depth={depth + 1}
-                  onOpenFile={onOpenFile}
-                />
+                <TreeItem key={idx} node={child} onOpenFile={onOpenFile} />
               ))}
             </ul>
           )}
@@ -67,9 +57,9 @@ export default function FileTree({
 }) {
   return (
     <div className="w-[200px] h-full border-2 border-gray-400 overflow-y-auto">
-      <ul>
+      <ul className="-ml-2">
         {nodes.map((node, idx) => (
-          <TreeItem key={idx} node={node} depth={0} onOpenFile={onOpenFile} />
+          <TreeItem key={idx} node={node} onOpenFile={onOpenFile} />
         ))}
       </ul>
     </div>
