@@ -11,8 +11,8 @@ const Editor = dynamic(() => import("./(_components)/Editor"), {
   ssr: false,
 });
 
-const FileUploadHander = dynamic(
-  () => import("./(_components)/FileUploadHander"),
+const FileUploadHandler = dynamic(
+  () => import("./(_components)/FileUploadHandler"),
   {
     ssr: false,
   }
@@ -110,9 +110,10 @@ export default function Home() {
 
   return (
     <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-[#0D0D0D] text-[#d4d4d4]">
-      <FileUploadHander
+      <FileUploadHandler
         setFile={setZipFile}
         file={zipFile}
+        fileMap={fileMap}
         setFileMap={setFileMap}
         setFileTree={setFileTree}
         setOpenFiles={setOpenFiles}
@@ -121,12 +122,14 @@ export default function Home() {
       <div className="flex flex-1 flex-row">
         <FileTree nodes={fileTree} onOpenFile={handleOpenFile} />
         <div className="flex flex-col flex-1">
-          <Tabs
-            openFiles={openFiles}
-            onClose={handleCloseFile}
-            onSelect={setCurrentFilePath}
-            selectedFile={currentFilePath}
-          />
+          {zipFile && (
+            <Tabs
+              openFiles={openFiles}
+              onClose={handleCloseFile}
+              onSelect={setCurrentFilePath}
+              selectedFile={currentFilePath}
+            />
+          )}
           <Editor
             file={currentFilePath ? fileMap.get(currentFilePath) ?? null : null}
             setIsModified={setIsModified}

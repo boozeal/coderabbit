@@ -24,9 +24,10 @@ function TreeItem({
         <div>
           <div
             onClick={() => setIsDirOpen((prev) => !prev)}
-            className="cursor-pointer"
+            className={`cursor-pointer ${isDirOpen ? "text-[#88C0D0]" : ""}`}
           >
-            {isDirOpen ? "▼" : "▶"} {node.name}
+            <span className="text-white">{isDirOpen ? "▼" : "▶"}</span>{" "}
+            {node.name}
           </div>
           {isDirOpen && node.children && (
             <ul className="border-l border-gray-200 mx-2">
@@ -56,7 +57,7 @@ export default function FileTree({
   onOpenFile: (filePath: string) => void;
 }) {
   return (
-    <div className="w-[200px] min-h-screen border-2 border-gray-400 overflow-y-auto">
+    <div className="w-[300px] min-h-screen border-2 border-gray-400 overflow-y-auto">
       <ul className="-ml-2">
         {nodes.map((node, idx) => (
           <TreeItem key={idx} node={node} onOpenFile={onOpenFile} />

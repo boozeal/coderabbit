@@ -6,6 +6,7 @@ const imageExtensions = [
   ".svg",
   ".bmp",
   ".webp",
+  ".ico",
 ];
 const textExtensions = [
   ".js",

@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { OpenedFile } from "../utils/openedFile";
 import JSZip from "jszip";
 import * as monaco from "monaco-editor";
+
 type TreeNode = {
   name: string;
   path: string;
@@ -14,12 +15,14 @@ type TreeNode = {
 export default function FileUploadHander({
   setFile,
   file,
+  fileMap,
   setFileMap,
   setFileTree,
   setOpenFiles,
   isModified,
 }: {
   file: File | null;
+  fileMap: Map<string, OpenedFile>;
   setFile: (file: File | null) => void;
   setFileMap: (fileMap: Map<string, OpenedFile>) => void;
   setFileTree: (fileTree: TreeNode[]) => void;
@@ -71,24 +74,34 @@ export default function FileUploadHander({
       setFile(file);
     }
   };
-
   const handleDownload = async () => {
-    const zip = new JSZip();
-
     const models = monaco.editor.getModels();
-
+    const modelMap = new Map<string, monaco.editor.ITextModel>();
     models.forEach((model) => {
       const path = model.uri.path;
-      const content = model.getValue();
-      const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
-      zip.file(normalizedPath, content);
+      modelMap.set(path, model);
     });
 
-    const blob = await zip.generateAsync({ type: "blob" });
-    const url = URL.createObjectURL(blob);
+    const zip = new JSZip();
+
+    fileMap.forEach((openedFile, path) => {
+      if (openedFile.type === "text") {
+        const model = modelMap.get(`/${path}`);
+        if (model) {
+          zip.file(path, model.getValue()); // 수정된 내용
+        } else if (openedFile.content) {
+          zip.file(path, new TextDecoder().decode(openedFile.content)); // 원본 텍스트
+        }
+      } else if (openedFile.content) {
+        zip.file(path, openedFile.content); // 이미지나 바이너리 파일
+      }
+    });
+
+    const content = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(content);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "modified_project.zip";
+    a.download = "compressed_files.zip";
     a.click();
     URL.revokeObjectURL(url);
   };
