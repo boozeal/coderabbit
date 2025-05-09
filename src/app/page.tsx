@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import JSZip from "jszip";
 import { createOpenedFile, OpenedFile } from "./utils/openedFile";
 import dynamic from "next/dynamic";
-import * as monaco from "monaco-editor";
 
 const Editor = dynamic(() => import("./(_components)/Editor"), {
   ssr: false,
@@ -18,25 +17,6 @@ type TreeNode = {
   path: string;
   isDir: boolean;
   children?: TreeNode[];
-};
-
-// Monaco 환경 설정
-self.MonacoEnvironment = {
-  getWorkerUrl: function (moduleId, label) {
-    if (label === "json") {
-      return "./json.worker.bundle.js";
-    }
-    if (label === "css" || label === "scss" || label === "less") {
-      return "./css.worker.bundle.js";
-    }
-    if (label === "html" || label === "handlebars" || label === "razor") {
-      return "./html.worker.bundle.js";
-    }
-    if (label === "typescript" || label === "javascript") {
-      return "./ts.worker.bundle.js";
-    }
-    return "./editor.worker.bundle.js";
-  },
 };
 
 export default function Home() {
