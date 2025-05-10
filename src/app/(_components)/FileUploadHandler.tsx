@@ -102,8 +102,11 @@ export default function FileUploadHander({
       }
     });
 
+    const content = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(content);
     const a = document.createElement("a");
     const downloadName = fileName?.replace(/\.zip$/i, "") ?? "archive";
+    a.href = url;
     a.download = `${downloadName}.zip`;
     a.click();
     URL.revokeObjectURL(url);

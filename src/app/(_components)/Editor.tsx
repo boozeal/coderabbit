@@ -50,20 +50,23 @@ export default function Editor({
         }
       );
     }
+  }, [file]);
 
-    // 변경 감지
+  useEffect(() => {
     const disposable = editorInstance?.onDidChangeModelContent(() => {
       setIsModified(true);
     });
     return () => {
       disposable?.dispose();
     };
-  }, [file]);
+  }, [editorInstance]);
 
   if (!file) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center">
-        No file selected
+      <div className="flex-1 relative">
+        <div className="absolute inset-0 flex items-center justify-center">
+          No file selected
+        </div>
       </div>
     );
   }
