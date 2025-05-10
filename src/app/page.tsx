@@ -34,19 +34,16 @@ export default function Home() {
   const [isModified, setIsModified] = useState(false);
 
   const handleCloseFile = (filePath: string) => {
-    const index = openFiles.indexOf(filePath);
-    const newOpenFiles = openFiles.filter((f) => f !== filePath);
+    setOpenFiles((prev) => {
+      const index = prev.indexOf(filePath);
+      const next = prev.filter((f) => f !== filePath);
 
-    // 이전 인덱스 계산 (index - 1), 0보다 작으면 첫 번째 파일 선택
-    const newCurrent =
-      index > 0
-        ? openFiles[index - 1]
-        : newOpenFiles.length > 0
-        ? newOpenFiles[0]
-        : null;
+      setCurrentFilePath(
+        index > 0 ? prev[index - 1] : next.length > 0 ? next[0] : null
+      );
 
-    setCurrentFilePath(newCurrent);
-    setOpenFiles(newOpenFiles);
+      return next;
+    });
   };
 
   const handleOpenFile = (filePath: string) => {
