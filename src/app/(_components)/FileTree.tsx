@@ -31,8 +31,12 @@ function TreeItem({
           </div>
           {isDirOpen && node.children && (
             <ul className="border-l border-[#5A5A5A] mx-2">
-              {node.children.map((child, idx) => (
-                <TreeItem key={idx} node={child} onOpenFile={onOpenFile} />
+              {node.children.map((child) => (
+                <TreeItem
+                  key={child.path}
+                  node={child}
+                  onOpenFile={onOpenFile}
+                />
               ))}
             </ul>
           )}
