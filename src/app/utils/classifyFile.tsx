@@ -28,7 +28,8 @@ const textExtensions = [
 ];
 
 function getExtension(filename: string): string {
-  return filename.slice(filename.lastIndexOf(".")).toLowerCase();
+  const lastDotIndex = filename.lastIndexOf(".");
+  return lastDotIndex === -1 ? "" : filename.slice(lastDotIndex).toLowerCase();
 }
 
 function isImageMime(mimeType: string): boolean {

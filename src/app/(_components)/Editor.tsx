@@ -57,7 +57,6 @@ export default function Editor({
     });
     return () => {
       disposable?.dispose();
-      editorInstance?.dispose();
     };
   }, [file]);
 
