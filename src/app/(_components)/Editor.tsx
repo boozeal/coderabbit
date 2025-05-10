@@ -61,7 +61,11 @@ export default function Editor({
   }, [file]);
 
   if (!file) {
-    return <div className="flex-1 p-4">No file selected</div>;
+    return (
+      <div className="absolute inset-0 flex items-center justify-center">
+        No file selected
+      </div>
+    );
   }
 
   return (
