@@ -36,7 +36,6 @@ export function detectLanguage(filePath: string): string {
 // Monaco Editor 초기화
 export function initMonaco(): void {
   // 에디터 기본 옵션 설정
-  monaco.editor.EditorOptions.tabSize.defaultValue = 2;
   monaco.editor.EditorOptions.wordWrap.defaultValue = "on";
 
   // 테마 등록
