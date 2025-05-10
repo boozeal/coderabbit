@@ -13,9 +13,9 @@ export default function Tabs({
 }) {
   return (
     <div className="w-full h-[40px] border-1 border-[#202020] flex overflow-x-auto">
-      {openFiles.map((file, index) => (
+      {openFiles.map((file) => (
         <div
-          key={index}
+          key={file}
           className={`flex items-center justify-between p-2 min-w-[100px] max-w-[200px] ${
             file === selectedFile
               ? "bg-[#1E1E1E] text-[#EBCB8B]"
