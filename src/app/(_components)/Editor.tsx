@@ -57,20 +57,9 @@ export default function Editor({
     });
     return () => {
       disposable?.dispose();
+      editorInstance?.dispose();
     };
   }, [file]);
-
-  useEffect(() => {
-    if (editorInstance) {
-      const disposable = editorInstance.onDidChangeModelContent(() => {
-        setIsModified(true);
-      });
-
-      return () => {
-        disposable?.dispose();
-      };
-    }
-  }, [editorInstance]);
 
   if (!file) {
     return <div className="flex-1 p-4">No file selected</div>;
