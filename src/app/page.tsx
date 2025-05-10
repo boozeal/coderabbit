@@ -47,9 +47,12 @@ export default function Home() {
   };
 
   const handleOpenFile = (filePath: string) => {
-    if (!openFiles.includes(filePath)) {
-      setOpenFiles([...openFiles, filePath]);
-    }
+    setOpenFiles((prev) => {
+      if (!prev.includes(filePath)) {
+        return [...prev, filePath];
+      }
+      return prev;
+    });
     setCurrentFilePath(filePath);
   };
 
