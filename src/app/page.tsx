@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import RefactoredFileTree from "./(_components)/file-tree/FileTree";
 import EditorTabs from "./(_components)/editor/EditorTab";
