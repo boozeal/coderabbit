@@ -6,7 +6,7 @@ import JSZip from "jszip";
 import { createOpenedFile, OpenedFile } from "./utils/openedFile";
 import dynamic from "next/dynamic";
 import RefactoredFileTree from "./(_components)/file-tree/FileTree";
-
+import EditorTabs from "./(_components)/editor/EditorTab";
 const Editor = dynamic(() => import("./(_components)/Editor"), {
   ssr: false,
 });
@@ -134,21 +134,19 @@ export default function Home() {
         setIsModified={setIsModified}
         setCurrentFilePath={setCurrentFilePath}
       />
-      <div className="flex flex-1 flex-row">
+      <div className="flex flex-1 overflow-hidden">
         <RefactoredFileTree
           nodes={fileTree}
           onOpenFile={handleOpenFile}
           className="h-full"
         />
-        <div className="flex flex-col flex-1 border-l border-[#202020]">
-          {openFiles.length > 0 && (
-            <Tabs
-              openFiles={openFiles}
-              onClose={handleCloseFile}
-              onSelect={setCurrentFilePath}
-              selectedFile={currentFilePath}
-            />
-          )}
+        <div className="flex flex-col flex-1 border-l border-[#202020] overflow-hidden">
+          <EditorTabs
+            openFiles={openFiles}
+            currentFilePath={currentFilePath}
+            onSelectTab={setCurrentFilePath}
+            onCloseTab={handleCloseFile}
+          />
           <Editor
             file={currentFilePath ? fileMap.get(currentFilePath) ?? null : null}
             setIsModified={setIsModified}
