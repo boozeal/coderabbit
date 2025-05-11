@@ -1,11 +1,11 @@
 "use client";
 
-import FileTree from "./(_components)/FileTree";
 import Tabs from "./(_components)/Tabs";
 import { useEffect, useState } from "react";
 import JSZip from "jszip";
 import { createOpenedFile, OpenedFile } from "./utils/openedFile";
 import dynamic from "next/dynamic";
+import RefactoredFileTree from "./(_components)/file-tree/FileTree";
 
 const Editor = dynamic(() => import("./(_components)/Editor"), {
   ssr: false,
@@ -135,8 +135,12 @@ export default function Home() {
         setCurrentFilePath={setCurrentFilePath}
       />
       <div className="flex flex-1 flex-row">
-        <FileTree nodes={fileTree} onOpenFile={handleOpenFile} />
-        <div className="flex flex-col flex-1">
+        <RefactoredFileTree
+          nodes={fileTree}
+          onOpenFile={handleOpenFile}
+          className="h-full"
+        />
+        <div className="flex flex-col flex-1 border-l border-[#202020]">
           {openFiles.length > 0 && (
             <Tabs
               openFiles={openFiles}
