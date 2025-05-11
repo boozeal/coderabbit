@@ -5,6 +5,27 @@ import {
   classifyFile,
 } from "../../src/app/lib/fileUtils";
 
+// classifyFile 함수 모킹
+jest.mock("../../src/app/lib/fileUtils", () => {
+  const originalModule = jest.requireActual("../../src/app/lib/fileUtils");
+  return {
+    ...originalModule,
+    classifyFile: jest.fn().mockImplementation((file) => {
+      // MIME 타입으로 파일 분류
+      if (file.type.startsWith("image/")) {
+        return Promise.resolve("image");
+      } else if (
+        file.type.startsWith("text/") ||
+        file.name.endsWith(".js") ||
+        file.name.endsWith(".css")
+      ) {
+        return Promise.resolve("text");
+      }
+      return Promise.resolve("binary");
+    }),
+  };
+});
+
 // File.prototype.slice 메서드를 모킹
 beforeAll(() => {
   // Jest 환경에서 File.prototype.slice().arrayBuffer 메서드 구현
