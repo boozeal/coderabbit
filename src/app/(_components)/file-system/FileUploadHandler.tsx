@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { useZipHandler } from "../../hooks/useZipHandler";
 import { useFileStore } from "../../store/fileStore";
 import * as monaco from "monaco-editor";
-
+import Image from "next/image";
 export default function FileUploadHandler() {
   const [isDragging, setIsDragging] = useState(false);
   const { processZipFile, downloadZipFile, isLoading, progress } =
@@ -111,7 +111,14 @@ export default function FileUploadHandler() {
           htmlFor="file-upload"
           className="flex items-center text-gray-300 cursor-pointer hover:text-white"
         >
-          <span className="mr-2">📁</span>
+          <span className="mr-2">
+            <Image
+              src="/icons/file_type_zip.svg"
+              alt="zip icon"
+              width={16}
+              height={16}
+            />
+          </span>
           {zipFile
             ? zipFile.name
             : isDragging

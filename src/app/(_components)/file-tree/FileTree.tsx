@@ -11,7 +11,7 @@ interface FileTreeProps {
   className?: string;
 }
 
-export default function RefactoredFileTree({
+export default function FileTree({
   nodes,
   onOpenFile,
   className = "",
@@ -40,10 +40,10 @@ export default function RefactoredFileTree({
       <div style={{ height: totalHeight, position: "relative" }}>
         {/* 가시 영역 아이템 */}
         <div style={{ transform: `translateY(${offsetY}px)` }}>
-          {visibleItems.map(({ node, level, isVisible }) => (
+          {visibleItems.map(({ node, level }) => (
             <div
               key={node.path}
-              className={`flex items-center py-1 px-2 hover:bg-gray-700 cursor-pointer text-sm`}
+              className={`flex items-center py-1 px-2 hover:bg-gray-700 hover:text-white cursor-pointer text-sm`}
               style={{
                 paddingLeft: `${(level + 1) * 12}px`,
                 height: "24px",

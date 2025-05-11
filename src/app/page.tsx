@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
-import RefactoredFileTree from "./(_components)/file-tree/FileTree";
+import FileTree from "./(_components)/file-tree/FileTree";
 import EditorTabs from "./(_components)/editor/EditorTab";
 import { useFileStore } from "./store/fileStore";
 
@@ -54,11 +54,7 @@ export default function EditorPage() {
     <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-[#141414] text-[#828282]">
       <FileUploadHandler />
       <div className="flex flex-1 overflow-hidden">
-        <RefactoredFileTree
-          nodes={fileTree}
-          onOpenFile={openFile}
-          className="h-full"
-        />
+        <FileTree nodes={fileTree} onOpenFile={openFile} className="h-full" />
         <div className="flex flex-col flex-1 border-l border-[#202020] overflow-hidden">
           <EditorTabs
             openFiles={openFiles}
