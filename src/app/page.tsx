@@ -51,10 +51,10 @@ export default function EditorPage() {
     setIsModified(true);
   };
   return (
-    <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-[#141414] text-[#828282]">
+    <div className="w-full max-w-[1200px] mx-auto h-screen flex flex-col bg-[#141414] text-[#828282]">
       <FileUploadHandler />
-      <div className="flex flex-1 overflow-hidden">
-        <FileTree nodes={fileTree} onOpenFile={openFile} className="h-full" />
+      <div className="flex flex-1 overflow-hidden max-h-full">
+        <FileTree nodes={fileTree} onOpenFile={openFile} />
         <div className="flex flex-col flex-1 border-l border-[#202020] overflow-hidden">
           <EditorTabs
             openFiles={openFiles}

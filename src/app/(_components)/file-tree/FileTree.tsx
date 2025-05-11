@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { TreeNode } from "../../types";
 import { useVirtualizedTree } from "../../hooks/useVirtualizedTree";
 import FileIcon from "../common/FileIcon";
@@ -11,11 +11,7 @@ interface FileTreeProps {
   className?: string;
 }
 
-export default function FileTree({
-  nodes,
-  onOpenFile,
-  className = "",
-}: FileTreeProps) {
+export default function FileTree({ nodes, onOpenFile }: FileTreeProps) {
   const {
     containerRef,
     visibleItems,
@@ -24,26 +20,31 @@ export default function FileTree({
     isExpanded,
     toggleNode,
   } = useVirtualizedTree(nodes, {
-    itemHeight: 24, // 각 아이템의 높이
-    containerHeight: 600, // 컨테이너 높이
+    itemHeight: 24,
     paddingTop: 8,
     paddingBottom: 8,
   });
 
+  useEffect(() => {
+    console.log(visibleItems.length);
+  }, [visibleItems]);
+
   return (
     <div
-      className={`w-[300px] overflow-y-auto ${className}`}
+      className={`w-[300px] overflow-y-auto scrollbar-hide`}
       ref={containerRef}
-      style={{ height: "100%" }}
     >
-      {/* 전체 높이를 위한 컨테이너 */}
-      <div style={{ height: totalHeight, position: "relative" }}>
-        {/* 가시 영역 아이템 */}
+      <div
+        style={{
+          height: `${totalHeight}px`,
+          position: "relative",
+        }}
+      >
         <div style={{ transform: `translateY(${offsetY}px)` }}>
           {visibleItems.map(({ node, level }) => (
             <div
               key={node.path}
-              className={`flex items-center py-1 px-2 hover:bg-gray-700 hover:text-white cursor-pointer text-sm`}
+              className="flex items-center py-1 px-2 hover:bg-gray-700 hover:text-white cursor-pointer text-sm"
               style={{
                 paddingLeft: `${(level + 1) * 12}px`,
                 height: "24px",
@@ -53,9 +54,9 @@ export default function FileTree({
                 node.isDir ? toggleNode(node.path) : onOpenFile(node.path)
               }
             >
-              <span className="mr-1 flex items-center">
+              <span className="flex items-center">
                 {node.isDir ? (
-                  <span className="mr-1">
+                  <span className="ml-[2px] mr-2">
                     {isExpanded(node.path) ? "▼" : "▶"}
                   </span>
                 ) : (
