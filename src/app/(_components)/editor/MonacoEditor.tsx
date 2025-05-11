@@ -51,7 +51,7 @@ export default memo(function MonacoEditor({
   // 이미지 파일인 경우
   if (file.type === "image" && file.content) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gray-900">
+      <div className="flex-1 flex items-center justify-center bg-[#202020]">
         <img
           src={URL.createObjectURL(new Blob([file.content]))}
           alt={file.name}
@@ -64,7 +64,7 @@ export default memo(function MonacoEditor({
   // 바이너리 파일인 경우
   if (file.type === "binary") {
     return (
-      <div className="flex-1 p-4 bg-gray-900 text-gray-300">
+      <div className="flex-1 p-4 bg-[#202020] text-white text-sm">
         <h3 className="text-lg font-medium">바이너리 파일 (편집 불가)</h3>
         <p>파일 경로: {file.path}</p>
         <p>파일 이름: {file.name}</p>

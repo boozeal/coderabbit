@@ -5,11 +5,13 @@ import { useZipHandler } from "../../hooks/useZipHandler";
 import { useFileStore } from "../../store/fileStore";
 import * as monaco from "monaco-editor";
 import Image from "next/image";
+
 export default function FileUploadHandler() {
   const [isDragging, setIsDragging] = useState(false);
   const { processZipFile, downloadZipFile, isLoading, progress } =
     useZipHandler();
-  const { zipFile, fileMap, isModified, clearAll } = useFileStore();
+  const { zipFile, fileMap, isModified, clearAll, currentFilePath } =
+    useFileStore();
 
   // 드래그 앤 드롭 이벤트 핸들러
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -126,6 +128,12 @@ export default function FileUploadHandler() {
             : "클릭하거나 드래그해서 ZIP 파일을 업로드하세요"}
         </label>
       </div>
+
+      {currentFilePath && (
+        <div className="text-gray-300 text-sm">
+          {currentFilePath.split("/").pop()}
+        </div>
+      )}
 
       <div className="flex items-center gap-2">
         {isLoading && (
