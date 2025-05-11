@@ -1,6 +1,5 @@
 "use client";
 
-import Tabs from "./(_components)/Tabs";
 import { useEffect, useState } from "react";
 import JSZip from "jszip";
 import { createOpenedFile, OpenedFile } from "./utils/openedFile";
@@ -12,7 +11,7 @@ const Editor = dynamic(() => import("./(_components)/Editor"), {
 });
 
 const FileUploadHandler = dynamic(
-  () => import("./(_components)/FileUploadHandler"),
+  () => import("./(_components)/file-system/FileUploadHandler"),
   {
     ssr: false,
   }
@@ -124,16 +123,7 @@ export default function Home() {
 
   return (
     <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col bg-[#141414] text-[#828282]">
-      <FileUploadHandler
-        setFile={setZipFile}
-        fileMap={fileMap}
-        setFileMap={setFileMap}
-        setFileTree={setFileTree}
-        setOpenFiles={setOpenFiles}
-        isModified={isModified}
-        setIsModified={setIsModified}
-        setCurrentFilePath={setCurrentFilePath}
-      />
+      <FileUploadHandler />
       <div className="flex flex-1 overflow-hidden">
         <RefactoredFileTree
           nodes={fileTree}
