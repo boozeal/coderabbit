@@ -1,6 +1,7 @@
 "use client";
 
 import React, { memo } from "react";
+import FileIcon from "../common/FileIcon";
 
 interface EditorTabsProps {
   openFiles: string[];
@@ -23,38 +24,6 @@ export default memo(function EditorTabs({
         const fileName = filePath.split("/").pop() || "";
         const isActive = currentFilePath === filePath;
 
-        // 파일 확장자에 따른 아이콘
-        const getFileIcon = () => {
-          const ext = fileName.split(".").pop()?.toLowerCase();
-          switch (ext) {
-            case "js":
-              return "📄 JS";
-            case "ts":
-            case "tsx":
-              return "📄 TS";
-            case "jsx":
-              return "📄 JSX";
-            case "json":
-              return "📄 JSON";
-            case "html":
-              return "📄 HTML";
-            case "css":
-            case "scss":
-            case "less":
-              return "📄 CSS";
-            case "md":
-              return "📄 MD";
-            case "png":
-            case "jpg":
-            case "jpeg":
-            case "gif":
-            case "svg":
-              return "🖼️";
-            default:
-              return "📄";
-          }
-        };
-
         return (
           <div
             key={filePath}
@@ -72,7 +41,7 @@ export default memo(function EditorTabs({
               className="flex items-center flex-1 overflow-hidden cursor-pointer"
               onClick={() => onSelectTab(filePath)}
             >
-              <span className="mr-1">{getFileIcon()}</span>
+              <FileIcon fileName={fileName} />
               <span className="truncate">{fileName}</span>
             </div>
 

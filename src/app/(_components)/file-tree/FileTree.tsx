@@ -3,6 +3,7 @@
 import React, { useMemo } from "react";
 import { TreeNode } from "../../types";
 import { useVirtualizedTree } from "../../hooks/useVirtualizedTree";
+import FileIcon from "../common/FileIcon";
 
 interface FileTreeProps {
   nodes: TreeNode[];
@@ -29,41 +30,6 @@ export default function RefactoredFileTree({
     paddingBottom: 8,
   });
 
-  // 파일 아이콘 선택 함수
-  const getFileIcon = (fileName: string, isDir: boolean) => {
-    if (isDir) return "📁";
-
-    const ext = fileName.split(".").pop()?.toLowerCase();
-
-    switch (ext) {
-      case "js":
-        return "📄 JS";
-      case "ts":
-      case "tsx":
-        return "📄 TS";
-      case "jsx":
-        return "📄 JSX";
-      case "json":
-        return "📄 JSON";
-      case "html":
-        return "📄 HTML";
-      case "css":
-      case "scss":
-      case "less":
-        return "📄 CSS";
-      case "md":
-        return "📄 MD";
-      case "png":
-      case "jpg":
-      case "jpeg":
-      case "gif":
-      case "svg":
-        return "🖼️";
-      default:
-        return "📄";
-    }
-  };
-
   return (
     <div
       className={`w-[300px] overflow-y-auto ${className}`}
@@ -87,13 +53,14 @@ export default function RefactoredFileTree({
                 node.isDir ? toggleNode(node.path) : onOpenFile(node.path)
               }
             >
-              <span className="mr-1">
-                {node.isDir && (
+              <span className="mr-1 flex items-center">
+                {node.isDir ? (
                   <span className="mr-1">
                     {isExpanded(node.path) ? "▼" : "▶"}
                   </span>
+                ) : (
+                  <FileIcon fileName={node.name} />
                 )}
-                {getFileIcon(node.name, node.isDir)}
               </span>
               <span className="truncate">{node.name}</span>
             </div>
